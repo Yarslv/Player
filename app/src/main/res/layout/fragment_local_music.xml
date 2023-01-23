@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yprodan.player.ui.fragments.local_music.LocalMusicFragmentViewModel" />
+
+        <import type="android.view.View" />
+
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        setRefresh="@{() -> viewModel.onRefresh()}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_bg"
+            android:orientation="vertical"
+            tools:context=".ui.fragments.local_music.LocalMusicFragment">
+
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/dashed_stroke"
+                android:closeIcon="@drawable/ic_baseline_close_24"
+                android:layoutDirection="rtl"
+                android:onQueryTextChange="@{(text) -> viewModel.getByText(text)}"
+                android:searchIcon="@drawable/ic_search"
+                android:theme="@style/SearchViewTextColor"
+                tools:text="fj;lsf;ldkd" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginHorizontal="16dp"
+                android:gravity="center"
+                android:text="Something went wrong"
+                android:textColor="@color/youtube_fragment_title"
+                android:textSize="24sp"
+                android:visibility="@{viewModel.isError() ? View.VISIBLE :View.GONE }" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:visibility="@{viewModel.isError() ? View.GONE :View.VISIBLE }"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_local_music" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

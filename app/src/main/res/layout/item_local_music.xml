@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="model"
+            type="com.yprodan.player.domain.entity.MusicModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="74.28dp"
+        android:paddingHorizontal="14dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icon"
+            app:loadAlbumCover="@{model.uri}"
+            android:layout_width="47.26dp"
+            android:layout_height="47.26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_melody" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/compositionNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10.05dp"
+            android:textColor="@color/local_music_recycler_composition_name"
+            android:textSize="15.63sp"
+            android:text="@{model.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Chi Shenidi? (feat. Hichkas)" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/compositionAuthorTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26.05dp"
+            android:text="@{model.artist}"
+            android:textColor="@color/local_music_recycler_author_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon"
+            app:layout_constraintTop_toBottomOf="@id/compositionNameTextView"
+            tools:text="Fadaei" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

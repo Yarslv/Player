@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yprodan.player.ui.fragments.home.player.PlayerViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yprodan.player.ui.fragments.home.player.ContentType" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:clickable="false"
+        android:layout_height="match_parent"
+        android:background="@color/main_bg">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:gravity="center"
+            android:text="@string/playing_now"
+            android:textColor="@color/normal_player_title"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:backgroundTint="@color/main_bg"
+            android:onClick="@{() -> viewModel.collapsePlayer()}"
+            android:src="@drawable/ic_hide"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title" />
+
+        <FrameLayout
+            android:id="@+id/audioVideoContent"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@id/title">
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtubePlayer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.contentType == ContentType.YouTube ? View.VISIBLE : View.GONE}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/albumCoverage"
+                loadAlbumCover="@{viewModel.imageUri}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:visibility="@{viewModel.contentType == ContentType.MP3 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+        </FrameLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/compositionNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{viewModel.compositionName}"
+            android:textColor="@color/normal_player_comp_name"
+            android:textSize="30sp"
+            app:layout_constraintTop_toBottomOf="@id/audioVideoContent"
+            tools:text="Moment Apart" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{viewModel.compositionArtist}"
+            android:textColor="@color/normal_player_comp_artist"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/compositionNameTextView"
+            tools:text="ODESZA" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{viewModel.currentTime}"
+            android:textColor="@color/normal_player_play_times"
+            app:layout_constraintBottom_toTopOf="@id/seekBar"
+            app:layout_constraintStart_toStartOf="@id/seekBar"
+            tools:text="00:00" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeEnd"
+            duration="@{viewModel.totalTime}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/normal_player_play_times"
+            app:layout_constraintBottom_toTopOf="@id/seekBar"
+            app:layout_constraintEnd_toEndOf="@id/seekBar"
+            tools:text="04:00" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+           style="@style/SeekbarStyle"
+            android:layout_marginBottom="50dp"
+            android:max="@{viewModel.totalTime}"
+                android:progress="@{viewModel.seekBarTime}"
+            app:layout_constraintBottom_toTopOf="@id/buttonPlayPause" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/buttonPlayPause"
+            setPlayPauseIcon="@{viewModel.playerState}"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/main_bg"
+            android:onClick="@{() -> viewModel.playPause()}"
+            android:src="@drawable/ic_pause"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/buttonPrev"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/main_bg"
+            android:onClick="@{() -> viewModel.previous()}"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="@id/buttonPlayPause"
+            app:layout_constraintEnd_toStartOf="@id/buttonPlayPause"
+            app:layout_constraintTop_toTopOf="@id/buttonPlayPause" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/buttonNext"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="24dp"
+            android:backgroundTint="@color/main_bg"
+            android:onClick="@{() -> viewModel.next()}"
+            android:src="@drawable/ic_next"
+            app:layout_constraintBottom_toBottomOf="@id/buttonPlayPause"
+            app:layout_constraintStart_toEndOf="@id/buttonPlayPause"
+            app:layout_constraintTop_toTopOf="@id/buttonPlayPause" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

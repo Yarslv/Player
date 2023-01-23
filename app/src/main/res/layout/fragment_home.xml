@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sothree="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yprodan.player.ui.fragments.home.HomeFragmentViewModel" />
+
+        <variable
+            name="playerViewModel"
+            type="com.yprodan.player.ui.fragments.home.player.PlayerViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="com.yprodan.player.ui.fragments.home.player.SlidePanelState" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/main_bg"
+        android:orientation="vertical">
+
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            android:id="@+id/slidingLayout"
+            setPanelState="@{playerViewModel.panelState}"
+            android:layout_width="match_parent"
+
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toTopOf="@id/homeBottomNavView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:umanoPanelHeight="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/homePager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:saveEnabled="false"
+                    app:layout_constraintBottom_toTopOf="@id/miniPlayer"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <include
+                    android:id="@+id/miniPlayer"
+                    layout="@layout/player_mini"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:viewModel="@{playerViewModel}" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/playerNormal"
+                layout="@layout/player_normal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:viewModel="@{playerViewModel}" />
+
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/homeBottomNavView"
+            hide="@{playerViewModel.panelState}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_bg"
+            app:itemIconTint="@drawable/selector_bottom_nav_view"
+            app:itemRippleColor="@null"
+            app:itemTextColor="@drawable/selector_bottom_nav_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_home_navigation" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

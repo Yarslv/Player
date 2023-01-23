@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Player</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="permission_error_text">No permission to read files</string>
+    <string name="playing_now">Playing Now</string>
+    <string name="notification_player_name">Player</string>
+</resources>
