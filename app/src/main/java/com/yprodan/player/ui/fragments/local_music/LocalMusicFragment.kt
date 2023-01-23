@@ -1,9 +1,8 @@
 package com.yprodan.player.ui.fragments.local_music
 
 import android.content.Intent
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.yprodan.player.Constant
 import com.yprodan.player.R
 import com.yprodan.player.arch.BaseFragment
@@ -21,11 +20,30 @@ class LocalMusicFragment : BaseFragment<FragmentLocalMusicBinding>(R.layout.frag
 
     override val viewModel: LocalMusicFragmentViewModel by viewModel()
     val playerViewModel: PlayerViewModel by viewModel()
+    private lateinit var activityResultLauncher: ActivityResultLauncher<String>
+
 
     override fun setObservers() {
-        checkPermission()
+        checkPermission { onPermissionGranted() }
+        activityResultLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         binding.viewModel = viewModel
 
+    }
+
+    private fun checkPermission(callback: () -> Unit) {
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { result ->
+            if (result) {
+                callback()
+            } else {
+                viewModel.setError(true)
+                makeToast(R.string.permission_error_text)
+            }
+        }
+    }
+
+    private fun onPermissionGranted() {
         val serviceIntent = Intent(requireContext(), PlayerService::class.java)
 
         val adapter = MusicRecyclerAdapter(arrayListOf())
@@ -80,25 +98,6 @@ class LocalMusicFragment : BaseFragment<FragmentLocalMusicBinding>(R.layout.frag
                 else -> {}
             }
         }
-    }
-
-    private fun checkPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                0
-            )
-        }
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_DENIED
-        )
-            makeToast(R.string.permission_error_text)
+        viewModel.onRefresh()
     }
 }

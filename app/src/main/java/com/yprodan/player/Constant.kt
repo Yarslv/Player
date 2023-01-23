@@ -2,7 +2,7 @@ package com.yprodan.player
 
 object Constant {
     const val BASE_URL = "https://www.googleapis.com/youtube/v3/"
-    const val API_KEY = ""
+    const val API_KEY = "AIzaSyD-HWvx39FSsj1nq4bjB-dzvbInPElM6vc"
     const val playlistIdFirst = "PL2UBhB6hwsqRM4w4vtktVS3ADKIM2N03W"
     const val playlistIdSecond = "PL2UBhB6hwsqSp3bKphwSgpxdykg1IQ61m"
 

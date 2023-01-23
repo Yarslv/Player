@@ -20,6 +20,10 @@ class LocalMusicFragmentViewModel(
         getAllMusic()
     }
 
+    fun setError(error: Boolean){
+        _isError.postValue(error)
+    }
+
     private fun getAllMusic() {
         try {
             _musicList.postValue(useCase.getLocalMusic())
