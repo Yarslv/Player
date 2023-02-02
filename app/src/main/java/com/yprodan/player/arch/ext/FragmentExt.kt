@@ -9,7 +9,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
@@ -24,6 +23,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.yprodan.player.Constant
 import com.yprodan.player.R
+import com.yprodan.player.util.MediaMetaDataRetrieverDecorator
 
 
 fun Fragment.makeToast(textRes: Int) {
@@ -59,7 +59,11 @@ fun Fragment.showNotifications(url: String, title: String, playing: Boolean) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel =
-            NotificationChannel(Constant.NOTIFICATION_CHANNEL_ID, getString(R.string.notification_player_name), NotificationManager.IMPORTANCE_HIGH)
+            NotificationChannel(
+                Constant.NOTIFICATION_CHANNEL_ID,
+                getString(R.string.notification_player_name),
+                NotificationManager.IMPORTANCE_HIGH
+            )
 
         with(NotificationManagerCompat.from(requireContext())) {
             createNotificationChannel(channel)
@@ -76,9 +80,9 @@ fun Fragment.showNotifications(url: String, title: String, playing: Boolean) {
 fun Fragment.showNotifications(uri: Uri, title: String, playing: Boolean) {
     val contentView = RemoteViews(requireActivity().packageName, R.layout.player_notification)
 
-    val m = MediaMetadataRetriever().apply { setDataSource(uri.path) }
+    val m = MediaMetaDataRetrieverDecorator(requireContext()).apply { setDataSource(uri) }
 
-    if (m.embeddedPicture == null) {
+    if (m.getEmbeddedPictureOrEmpty().isEmpty()) {
         contentView.setImageViewBitmap(
             R.id.albumImage,
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_melody_notification)
@@ -87,7 +91,11 @@ fun Fragment.showNotifications(uri: Uri, title: String, playing: Boolean) {
     } else {
         contentView.setImageViewBitmap(
             R.id.albumImage,
-            BitmapFactory.decodeByteArray(m.embeddedPicture, 0, m.embeddedPicture!!.size)
+            BitmapFactory.decodeByteArray(
+                m.getEmbeddedPictureOrEmpty(),
+                0,
+                m.getEmbeddedPictureOrEmpty().size
+            )
         )
     }
     contentView.setImageViewResource(
@@ -102,7 +110,11 @@ fun Fragment.showNotifications(uri: Uri, title: String, playing: Boolean) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel =
-            NotificationChannel(Constant.NOTIFICATION_CHANNEL_ID, getString(R.string.notification_player_name), NotificationManager.IMPORTANCE_HIGH)
+            NotificationChannel(
+                Constant.NOTIFICATION_CHANNEL_ID,
+                getString(R.string.notification_player_name),
+                NotificationManager.IMPORTANCE_HIGH
+            )
 
         with(NotificationManagerCompat.from(requireContext())) {
             createNotificationChannel(channel)
@@ -115,7 +127,12 @@ fun Fragment.showNotifications(uri: Uri, title: String, playing: Boolean) {
         }
     }
 }
-fun makeNotificationBuilder(contentView: RemoteViews, context: Context, title: String): NotificationCompat.Builder {
+
+fun makeNotificationBuilder(
+    contentView: RemoteViews,
+    context: Context,
+    title: String
+): NotificationCompat.Builder {
     val intentPrev = Intent(Context.NOTIFICATION_SERVICE)
 
     intentPrev.action = Constant.ACTION_NOTIFICATION_PREVIOUS_TAG
@@ -143,9 +160,9 @@ fun makeNotificationBuilder(contentView: RemoteViews, context: Context, title: S
         .getBroadcast(context, 1, intentStop, PendingIntent.FLAG_MUTABLE)
 
     return NotificationCompat.Builder(context, Constant.NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_music)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setDeleteIntent(pIntentStop)
-            .setContent(contentView)
-            .setSilent(true)
+        .setSmallIcon(R.drawable.ic_music)
+        .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+        .setDeleteIntent(pIntentStop)
+        .setContent(contentView)
+        .setSilent(true)
 }

@@ -1,6 +1,5 @@
 package com.yprodan.player.arch.ext
 
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -20,7 +19,7 @@ import com.yprodan.player.R
 import com.yprodan.player.domain.entity.VideoModel
 import com.yprodan.player.ui.fragments.home.player.PlayerState
 import com.yprodan.player.ui.fragments.home.player.SlidePanelState
-import java.io.File
+import com.yprodan.player.util.MediaMetaDataRetrieverDecorator
 
 @BindingAdapter("setCustomDivider")
 fun RecyclerView.setCustomDivider(@DrawableRes res: Int) {
@@ -34,11 +33,11 @@ fun RecyclerView.setCustomDivider(@DrawableRes res: Int) {
 fun AppCompatImageView.loadAlbumCover(uri: Uri) {
     if (uri != Uri.EMPTY) {
 
-        val m = MediaMetadataRetriever().apply {
-            setDataSource(File(uri.path.toString()).path)
+        val m = MediaMetaDataRetrieverDecorator(context).apply {
+            setDataSource(uri)
         }
 
-        Glide.with(this).load(m.embeddedPicture)
+        Glide.with(this).load(m.getEmbeddedPictureOrEmpty())
             .error(R.drawable.ic_melody)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(this)
