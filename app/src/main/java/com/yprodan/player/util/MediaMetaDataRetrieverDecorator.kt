@@ -26,7 +26,8 @@ class MediaMetaDataRetrieverDecorator(context: Context) {
         callbackList.forEach {
             try {
                 it.invoke(uri)
-                return
+                isError = false
+                return@forEach
             } catch (e: Throwable) {
                 isError = true
             }
