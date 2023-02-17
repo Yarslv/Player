@@ -5,4 +5,7 @@
     <string name="permission_error_text">No permission to read files</string>
     <string name="playing_now">Playing Now</string>
     <string name="notification_player_name">Player</string>
+    <string name="music_tab_title">Music</string>
+    <string name="files_tab_title">Files</string>
+    <string name="web_tab_title">Web</string>
 </resources>

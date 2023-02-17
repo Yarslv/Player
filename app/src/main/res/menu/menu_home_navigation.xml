@@ -3,16 +3,18 @@
 
     <item
         android:id="@+id/musicTabItem"
-        android:title="Music"
+        android:title="@string/music_tab_title"
         android:icon="@drawable/ic_music"/>
 
     <item
-        android:title=""
-        />
+        android:id="@+id/filesTabItem"
+        android:title="@string/files_tab_title"
+        android:icon="@drawable/ic_files"/>
 
     <item
-        android:id="@+id/filesTabItem"
-        android:title="Files"
-        android:icon="@drawable/ic_files"/>
+        android:id="@+id/webTabItem"
+        android:title="@string/web_tab_title"
+        android:icon="@drawable/ic_baseline_web_24"
+        />
 
 </menu>

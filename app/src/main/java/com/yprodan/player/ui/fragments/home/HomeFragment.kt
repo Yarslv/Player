@@ -116,6 +116,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             val index = when (it.itemId) {
                 R.id.musicTabItem -> 0
                 R.id.filesTabItem -> 1
+                R.id.webTabItem -> 2
                 else -> return@setOnItemSelectedListener false
             }
             binding.homePager.setCurrentItem(index, true)
